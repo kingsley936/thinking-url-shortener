@@ -1,0 +1,44 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: #f7f8fc;
+}
+
+.container {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+input,
+button {
+  width: 100%;
+  min-height: 48px;
+  font-size: 16px;
+  border-radius: 10px;
+}
+
+button {
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 20px 14px;
+  }
+
+  h1 {
+    font-size: 30px;
+  }
+
+  input,
+  button {
+    width: 100%;
+  }
+}
