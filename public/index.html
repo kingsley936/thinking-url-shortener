@@ -1,0 +1,205 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>@Thinking — Shorten your links</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+margin:0;
+font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;
+background:#0b1020;
+color:#f7f8ff;
+min-height:100vh
+}
+.wrap{max-width:920px;margin:auto;padding:28px 18px}
+.nav{display:flex;justify-content:space-between;align-items:center}
+.logo{font-weight:800;font-size:24px}
+.pill{
+font-size:12px;
+padding:8px 12px;
+border:1px solid #29324e;
+border-radius:999px;
+color:#b9c3df
+}
+.hero{text-align:center;padding:90px 0 50px}
+.hero h1{
+font-size:clamp(42px,9vw,78px);
+line-height:.95;
+margin:0 0 20px;
+letter-spacing:-3px
+}
+.hero h1 span{color:#8ea2ff}
+.hero p{
+color:#aeb8d4;
+font-size:18px;
+margin:0 auto 34px;
+max-width:600px
+}
+.box{
+background:#121a31;
+border:1px solid #293552;
+padding:10px;
+border-radius:18px;
+display:flex;
+gap:10px;
+max-width:760px;
+margin:auto;
+box-shadow:0 20px 70px #0006
+}
+.box input{
+flex:1;
+min-width:0;
+background:transparent;
+border:0;
+outline:0;
+color:#fff;
+font-size:16px;
+padding:14px
+}
+.btn{
+border:0;
+border-radius:13px;
+padding:0 22px;
+background:#fff;
+color:#0b1020;
+font-weight:800;
+cursor:pointer
+}
+.result{
+display:none;
+margin:20px auto 0;
+max-width:760px;
+background:#0f172b;
+border:1px solid #33405f;
+border-radius:16px;
+padding:18px;
+text-align:left
+}
+.result a{color:#9fb0ff;word-break:break-all}
+.error{color:#ff9d9d}
+.stats{
+margin-top:40px;
+display:flex;
+justify-content:center;
+gap:30px;
+color:#9eabc9;
+font-size:14px
+}
+.footer{
+text-align:center;
+color:#68738f;
+font-size:13px;
+margin-top:80px
+}
+@media(max-width:600px){
+.box{flex-direction:column}
+.btn{height:52px}
+.hero{padding-top:70px}
+.hero h1{letter-spacing:-2px}
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+<nav class="nav">
+<div class="logo">@Thinking</div>
+<div class="pill">Simple · Fast · Short</div>
+</nav>
+
+<main class="hero">
+
+<h1>
+Think less.<br>
+<span>Share faster.</span>
+</h1>
+
+<p>
+Turn long URLs into clean, memorable @Thinking links.
+</p>
+
+<form class="box" id="form">
+
+<input
+id="url"
+type="url"
+placeholder="Paste your long URL here…"
+required
+>
+
+<button class="btn">Shorten</button>
+
+</form>
+
+<div class="result" id="result"></div>
+
+<div class="stats">
+<span>⚡ Fast redirects</span>
+<span>🔗 Custom codes</span>
+<span>📊 Click tracking</span>
+</div>
+
+</main>
+
+<div class="footer">
+© @Thinking · Built for sharing
+</div>
+
+</div>
+
+<script>
+
+const form=document.getElementById('form');
+const url=document.getElementById('url');
+const result=document.getElementById('result');
+
+form.addEventListener('submit',async e=>{
+
+e.preventDefault();
+
+result.style.display='block';
+result.innerHTML='Creating your short link…';
+
+try{
+
+const r=await fetch('/api/shorten',{
+method:'POST',
+headers:{'Content-Type':'application/json'},
+body:JSON.stringify({url:url.value})
+});
+
+const d=await r.json();
+
+if(!r.ok)
+throw new Error(d.error||'Could not shorten');
+
+const shortUrl=location.origin+'/'+d.code;
+
+result.innerHTML=`
+<div><b>Your @Thinking link</b></div>
+<p>
+<a href="${shortUrl}" target="_blank">${shortUrl}</a>
+</p>
+<button class="btn"
+onclick="navigator.clipboard.writeText('${shortUrl}').then(()=>this.textContent='Copied!')">
+Copy link
+</button>
+`;
+
+}catch(err){
+
+result.innerHTML='<div class="error">'+err.message+'</div>';
+
+}
+
+});
+
+</script>
+
+</body>
+  </html>
