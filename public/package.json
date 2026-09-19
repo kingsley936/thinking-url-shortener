@@ -1,0 +1,11 @@
+{
+  "name": "thinking-url-shortener",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@upstash/redis": "^1.35.0"
+  }
+}
